@@ -7,12 +7,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hanbit.calcculator.domain.CalcDTO;
+import com.hanbit.calcculator.service.CalcService;
+import com.hanbit.calcculator.service.CalcServiceImpl;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     //연산하지 않고 선언만 한다.
     EditText et_num1,et_num2;
     Button  bt_plus, bt_minus, bt_multi, bt_divide, bt_result;
     TextView tv_result;
     int result;
+
+    CalcService service;
+    CalcDTO cal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +37,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_result = (TextView) findViewById(R.id.tv_result);
         result = 0;
 
+        service = new CalcServiceImpl();
+        cal = new CalcDTO();
+
         bt_plus.setOnClickListener(this);
         bt_minus.setOnClickListener(this);
         bt_multi.setOnClickListener(this);
         bt_divide.setOnClickListener(this);
         bt_result.setOnClickListener(this);
+
+
     }
 
     @Override
@@ -41,18 +54,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int num1 = Integer.parseInt(et_num1.getText().toString());
         int num2 = Integer.parseInt(et_num2.getText().toString());
 
+        cal.setNum1(num1);
+        cal.setNum2(num2);
+
         switch (v.getId()){
             case R.id.bt_plus:
-                result = num1 + num2;
+                result = service.plus(cal);
                 break;
             case R.id.bt_minus:
-                result = num1 - num2;
+                result = service.minus(cal);
                 break;
             case R.id.bt_multi:
-                result = num1 * num2;
+                result = service.multi(cal);
                 break;
             case R.id.bt_divide:
-                result = num1 / num2;
+                result = service.divide(cal);
                 break;
             case R.id.bt_result:
                 tv_result.setText("result : " + result);
